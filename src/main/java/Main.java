@@ -1,4 +1,5 @@
 import Controller.SocialMediaController;
+import DAO.AccountDao;
 import io.javalin.Javalin;
 
 /**
@@ -10,5 +11,6 @@ public class Main {
         SocialMediaController controller = new SocialMediaController();
         Javalin app = controller.startAPI();
         app.start(8080);
+        //app.post("/register", AccountDao::insertAccount);
     }
 }

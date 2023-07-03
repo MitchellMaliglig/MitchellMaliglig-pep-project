@@ -31,8 +31,10 @@ public class MessagesDao {
         } catch (SQLException e) {
             e.printStackTrace();
             return;
-        }
-
+        }/* 
+        for (Message m : messages){
+            System.out.println(m);
+        }*/
         ctx.status(200).result("OK");
         ctx.json(messages);
     }

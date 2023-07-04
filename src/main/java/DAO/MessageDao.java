@@ -11,7 +11,7 @@ import Model.Message;
 import Util.ConnectionUtil;
 import io.javalin.http.Context;
 
-public class MessagesDao {
+public class MessageDao {
     public static void getAllMessages(Context ctx){
         List<Message> messages = new ArrayList<>();
 

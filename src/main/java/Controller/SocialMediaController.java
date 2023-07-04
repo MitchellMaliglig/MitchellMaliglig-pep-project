@@ -1,7 +1,7 @@
 package Controller;
 
 import DAO.AccountDao;
-import DAO.MessagesDao;
+import DAO.MessageDao;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -22,7 +22,7 @@ public class SocialMediaController {
         app.post("/register", AccountDao::insertAccount);
         //app.post("/login", AccountDao::hi);
         //app.post("/messages", AccountDao::hi);
-        app.get("/login", MessagesDao::getAllMessages);
+        app.get("/login", MessageDao::getAllMessages);
 
         return app;
     }

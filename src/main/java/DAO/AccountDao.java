@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import Model.Account;
 import Util.ConnectionUtil;
@@ -23,8 +24,8 @@ public class AccountDao{
     }
 
     private static boolean doesUsernameExist(String username){
-        boolean accountExists = false;
-
+        boolean accountExists = false; 
+        
         try (Connection conn = ConnectionUtil.getConnection()) {
             String sql = "SELECT * FROM account WHERE username = ?";
             PreparedStatement statement = conn.prepareStatement(sql);
@@ -32,35 +33,47 @@ public class AccountDao{
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                accountExists = true;
+                accountExists = true; 
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+       
         return accountExists;
     }
 
-    public static void insertAccount(Context ctx){
-        Account account = ctx.bodyAsClass(Account.class);
-        System.out.println("here we are");
+    public Account insertAccount(Account account){
         if (account.getUsername().length() >= 1
             && account.getPassword().length() >= 4
-            && !doesUsernameExist(account.getUsername())){
+            //&& !doesUsernameExist(account.getUsername())
+            ){
                 try (Connection conn = ConnectionUtil.getConnection()) {
-                    String sql = "INSERT INTO account (username, password) VALUES (?, ?)";
-                    PreparedStatement statement = conn.prepareStatement(sql);
+                    String sql1 = "SELECT * FROM account WHERE username = ?";
+                    PreparedStatement statement = conn.prepareStatement(sql1);
                     statement.setString(1, account.getUsername());
-                    statement.setString(2, account.getPassword());
-                    statement.executeUpdate();
+                    ResultSet resultSet = statement.executeQuery();
+
+                    if (!resultSet.next()) {
+                        String sql = "INSERT INTO account (username, password) VALUES (?, ?)";
+                        PreparedStatement preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+                        preparedStatement.setString(1, account.getUsername());
+                        preparedStatement.setString(2, account.getPassword());
+
+                        preparedStatement.executeUpdate();
+                        ResultSet pkeyResultSet = preparedStatement.getGeneratedKeys();
+                        if(pkeyResultSet.next()){
+                            int accountID = (int) pkeyResultSet.getLong(1);
+                            return new Account(accountID, account.getUsername(), account.getPassword());
+                        }
+                    } 
+                    
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    ctx.status(500).result("Internal Server Error");
-                    return;
                 }
-                ctx.status(200).result("OK");
         } else{
-            ctx.status(400).result("Client error");
+
         }
+        return null;
     }
 }

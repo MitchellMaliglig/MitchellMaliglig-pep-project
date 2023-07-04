@@ -3,6 +3,7 @@
 package Service;
 
 import DAO.AccountDao;
+import Model.Account;
 
 public class AccountService{
     private AccountDao accountDao;
@@ -13,5 +14,14 @@ public class AccountService{
 
     public AccountService(AccountDao accountDao){
         this.accountDao = accountDao;
+    }
+
+    public Account insertAccount(Account account){
+        ///* 
+        //Account acc = new Account(2, "user", "password");
+        //if (account == null){//////////
+          //  return acc;
+        //}
+        return accountDao.insertAccount(account);
     }
 }

@@ -1,6 +1,4 @@
 import Controller.SocialMediaController;
-import DAO.AccountDao;
-import DAO.MessageDao;
 import io.javalin.Javalin;
 
 /**

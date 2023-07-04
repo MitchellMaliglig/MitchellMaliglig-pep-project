@@ -1,22 +1,16 @@
 package Controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import DAO.AccountDao;
 import DAO.MessageDao;
 import Model.Account;
-import Model.Message;
 import Service.AccountService;
 import Service.MessageService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-/**
- * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
- * found in readme.md as well as the test cases. You should
- * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
- */
 public class SocialMediaController {
     AccountService accountService;
     MessageService messageService;
@@ -35,7 +29,7 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         //app.get("example-endpoint", this::exampleHandler);
         app.post("/register", this::postAccountHandler);
-        //app.post("/login", AccountDao::hi);
+        app.post("/login", this::postLoginHandler);
         //app.post("/messages", AccountDao::hi);
         app.get("/login", MessageDao::getAllMessages);
 
@@ -58,5 +52,14 @@ public class SocialMediaController {
         }
     }
 
-
+    private void postLoginHandler(Context ctx) throws JsonMappingException, JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(ctx.body(), Account.class);
+        Account loggedInAccount = accountService.loginAccount(account);
+        if(loggedInAccount!=null){
+            ctx.json(mapper.writeValueAsString(loggedInAccount));
+        }else{
+            ctx.status(401);
+        }
+    }
 }

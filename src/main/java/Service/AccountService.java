@@ -17,11 +17,10 @@ public class AccountService{
     }
 
     public Account insertAccount(Account account){
-        ///* 
-        //Account acc = new Account(2, "user", "password");
-        //if (account == null){//////////
-          //  return acc;
-        //}
         return accountDao.insertAccount(account);
+    }
+
+    public Account loginAccount(Account account){
+        return accountDao.loginAccount(account);
     }
 }

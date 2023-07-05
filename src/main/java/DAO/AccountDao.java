@@ -67,13 +67,11 @@ public class AccountDao{
                             int accountID = (int) pkeyResultSet.getLong(1); 
                             return new Account(accountID, account.getUsername(), account.getPassword());
                         }
-                    } 
-                    
+                    }                 
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
         }
-
         return null;
     }
 
@@ -90,12 +88,10 @@ public class AccountDao{
                 String user = resultSet.getString("username");
                 String pass = resultSet.getString("password");
                 return new Account(id, user, pass);
-            } 
-            
+            }            
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        //return new Account(1, "testuser1", "password");
         return null;
     }
 }

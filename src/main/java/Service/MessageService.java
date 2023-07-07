@@ -27,4 +27,16 @@ public class MessageService{
     public Message getMessageById(int messageId){
         return this.messageDao.getMessageById(messageId);
     }
+
+    public Message deleteMessageById(int messageId){
+        return this.messageDao.deleteMessageById(messageId);
+    }
+
+    public Message updateMessageById(int messageId, String newMessageText){
+        return this.messageDao.updateMessageById(messageId, newMessageText);
+    }
+
+    public List<Message> getAllMessagesGivenId(int accountId){
+        return this.messageDao.getAllMessagesGivenId(accountId);
+    }
 }

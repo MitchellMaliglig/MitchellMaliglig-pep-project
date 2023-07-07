@@ -34,6 +34,9 @@ public class SocialMediaController {
         app.post("/messages", this::postNewMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageGivenIdHandler);
+        app.delete("/messages/{message_id}", this::deleteMessageGivenIdHandler);
+        app.patch("/messages/{message_id}", this::updateMessageGivenIdHandler);
+        app.get("/accounts/{account_id}/messages", this::getAllMessagesGivenIdHandler);
 
         return app;
     }
@@ -82,9 +85,32 @@ public class SocialMediaController {
     }
 
     private void getMessageGivenIdHandler(Context ctx){
-        //String messageId = ctx.pathParam("message_id");
-        //Message message = messageService.getMessageById(Integer.parseInt(messageId));
-        Message message = messageService.getMessageById(100);
+        String messageId = ctx.pathParam("message_id");
+        Message message = messageService.getMessageById(Integer.parseInt(messageId));
         ctx.json(message);
+    }
+
+    private void deleteMessageGivenIdHandler(Context ctx){
+        String messageId = ctx.pathParam("message_id");
+        Message deletedMessage = messageService.deleteMessageById(Integer.parseInt(messageId));
+        ctx.json(deletedMessage);
+    }
+
+    private void updateMessageGivenIdHandler(Context ctx) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        String messageId = ctx.pathParam("message_id");
+        String newMessageText = ctx.body();
+        Message updatedMessage = messageService.updateMessageById(Integer.parseInt(messageId), newMessageText);
+        if(updatedMessage!=null){
+            ctx.json(mapper.writeValueAsString(updatedMessage));
+        }else{
+            ctx.status(400);
+        }
+    }
+
+    private void getAllMessagesGivenIdHandler(Context ctx){
+        String accountId = ctx.pathParam("account_id");
+        List<Message> messages = messageService.getAllMessagesGivenId(Integer.parseInt(accountId));
+        ctx.json(messages);
     }
 }
